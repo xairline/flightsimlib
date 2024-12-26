@@ -28,7 +28,10 @@
 #ifndef FLIGHTSIMLIB_EXPORT_H
 #define FLIGHTSIMLIB_EXPORT_H
 
-
+#ifdef NO_DLL
+    #define FLIGHTSIMLIB_EXPORTED
+    #define CDECL
+#else
 // Define FLIGHTSIMLIB_EXPORTED for any platform
 #if defined _WIN32 || defined __CYGWIN__
 #ifdef FLIGHTSIMLIB_EXPORTS
@@ -65,4 +68,5 @@
 #endif
 
 
+#endif
 #endif

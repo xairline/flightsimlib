@@ -3,6 +3,11 @@
 
 #include "IObject.h"
 
+#ifdef NO_DLL
+    #define FSLAPI
+    #define MEMBERCALL
+    #define FSLCALL
+#else
 #ifdef _WIN64
 #define FSLAPI __cdecl
 #define MEMBERCALL
@@ -21,6 +26,7 @@
 	#define FSLCALL __declspec(dllexport)
 #else
 	#define FSLCALL __declspec(dllimport)
+#endif
 #endif
 #endif
 #endif
