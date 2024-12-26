@@ -48,6 +48,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <cstring>
 
 // TODO - this is for the timezone dependency
 // Once we split up the headers, we can clean this up

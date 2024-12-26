@@ -29,7 +29,17 @@
 
 // TODO: We need a cross platform library for this
 #include <cstdint>
+
+#if 0
 #include <guiddef.h>
+#else
+typedef struct _GUID {
+  uint32_t Data1;
+  unsigned short Data2;
+  unsigned short Data3;
+  unsigned char Data4[8];
+} GUID;
+#endif    
 
 namespace flightsimlib
 {
