@@ -2,10 +2,13 @@
 
 OBJDIR=./OBJ_win
 
-TARGET=xxx.a
+TARGET=decompression.exe
 HEADERS=$(wildcard include/*.h)
 SOURCES=$(wildcard src/*.cpp)
 OBJECTS:=$(addprefix $(OBJDIR)/, $(notdir $(SOURCES:.cpp=.o)))
+
+PTC_SOURCES=$(wildcard external/PTC/*.c)
+PTC_OBJECTS:=$(addprefix $(OBJDIR)/, $(notdir $(PTC_SOURCES:.c=.o)))
 
 CXX=g++
 CC=gcc
@@ -13,9 +16,11 @@ LD=gcc
 
 #CFLAGS+=-mdll -g0 -O2  -Wall -fdiagnostics-color -Wno-format-overflow -DWINDOWS -DWIN32 \
 	-I$(SDK)/CHeaders/XPLM -I$(SDK)/CHeaders/Widgets -DIBM=1 -DXPLM200
-CFLAGS+= -Iinclude -Iexternal -g0 -O2  -fdiagnostics-color -Wno-format-overflow \
+CXXFLAGS+= -Iinclude -Iexternal -g0 -O2  -fdiagnostics-color -Wno-format-overflow \
     -std=gnu++26 -DNOMINMAX -D_DEBUG -D_WINDOWS64 -DNO_DLL  # -Wall
-	
+
+CFLAGS+= -Iinclude -Iexternal -g0 -O2  -fdiagnostics-color -Wno-format-overflow \
+     -DNOMINMAX -D_DEBUG -D_WINDOWS64 -DNO_DLL  # -Wall
 
 LDFLAGS=-static-libgcc -static -lpthread
 LIBS=
@@ -24,15 +29,19 @@ LIBS=
 all: $(TARGET)
     $(shell [ -d $(OBJDIR) ] || mkdir $(OBJDIR))
 
-$(OBJDIR)/%.o: %.c $(HEADERS)
+$(OBJDIR)/%.o: external/PTC/%.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJDIR)/%.o: src/%.cpp $(HEADERS)
-	$(CXX) $(CFLAGS) -o $@ -c $<
-	
-$(TARGET): $(OBJECTS)
-	date
-    
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+flightsimlib.a: $(OBJECTS) $(PTC_OBJECTS)
+	ar r flightsimlib.a $(OBJECTS) $(PTC_OBJECTS)
+
+$(TARGET): $(OBJECTS) flightsimlib.a
+	g++ -o $@ $(CXXFLAGS) examples/decompression/decompression.cpp flightsimlib.a
+	cd examples/decompression && ../../$(TARGET)
+
 clean:
-	rm $(OBJECTS) $(TARGET)
+	rm $(OBJDIR)/*.[oa] $(TARGET) flightsimlib.a
 
