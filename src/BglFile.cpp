@@ -1927,11 +1927,11 @@ auto CBglTimeZoneLayer::RemoveTimeZone(const IBglTimeZone* timezone) -> void
 // CBglFile
 //****************************************************************************** 
 	
-CBglFile::CBglFile(): CBglFile(L"")
+CBglFile::CBglFile(): CBglFile("")
 {
 }
 
-CBglFile::CBglFile(std::wstring file_name):
+CBglFile::CBglFile(std::string file_name):
 	m_file_name(std::move(file_name)),
 	m_file_size(0),
 	m_header(),
@@ -2094,12 +2094,12 @@ bool CBglFile::Read()
 	return ReadAllLayers();
 }
 
-auto CBglFile::GetFileName() const -> const wchar_t*
+auto CBglFile::GetFileName() const -> const char*
 {
 	return m_file_name.c_str();
 }
 
-void CBglFile::Rename(const wchar_t* file_name)
+void CBglFile::Rename(const char* file_name)
 {
 	m_file_name = file_name;
 	m_dirty = true;

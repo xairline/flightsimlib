@@ -608,8 +608,8 @@ public:
 	virtual auto Close() -> bool = 0;
 	virtual auto Write() -> bool = 0;
 	virtual auto Read() -> bool = 0;
-	virtual auto GetFileName() const -> const wchar_t* = 0;
-	virtual auto Rename(const wchar_t* file_name) -> void = 0;
+	virtual auto GetFileName() const -> const char* = 0;
+	virtual auto Rename(const char* file_name) -> void = 0;
 	virtual auto IsDirty() const -> bool = 0;
 	virtual auto GetFileSize() const -> int = 0;
 	virtual auto TryMergeLayer(IBglLayer* layer) -> bool = 0;
@@ -917,7 +917,7 @@ class FLIGHTSIMLIB_EXPORTED CBglFile final : IBglFile
 {
 public:
 	CBglFile();
-	explicit CBglFile(std::wstring file_name);
+	explicit CBglFile(std::string file_name);
 	~CBglFile() = default;
 	// TODO - This is now move-only, not copyable
 	CBglFile(const CBglFile&) = delete;
@@ -940,8 +940,8 @@ public:
 	auto Close() -> bool override;
 	auto Write() -> bool override;
 	auto Read() -> bool override;
-	auto GetFileName() const -> const wchar_t* override;
-	auto Rename(const wchar_t* file_name) -> void override;
+	auto GetFileName() const -> const char* override;
+	auto Rename(const char* file_name) -> void override;
 	auto IsDirty() const -> bool override;
 	auto GetFileSize() const -> int override;
 	auto TryMergeLayer(IBglLayer* layer) -> bool override;
@@ -975,7 +975,7 @@ private:
 		return 0x08051803;
 	}
 	
-	std::wstring m_file_name;
+	std::string m_file_name;
 	int m_file_size;
 	SBglHeader m_header;
 	bool m_dirty;
